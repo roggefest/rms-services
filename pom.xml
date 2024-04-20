@@ -68,6 +68,30 @@
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 
+
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>3.5.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>javase</artifactId>
+			<version>3.5.3</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.w3c.jigsaw</groupId>
+			<artifactId>jigsaw</artifactId>
+			<version>2.2.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.14.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
