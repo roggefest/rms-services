@@ -40,9 +40,14 @@ public class JReportSheetService {
 
 	@Autowired
 	RemissionRepository remissionRepository;
+	
+	@Autowired
+	QRCodeGeneratorService qrCodeGeneratorService;
 
 	public void exportJasperReport(HttpServletResponse response, String remissionId, String folio, boolean printPrices)
 			throws JRException, IOException, AccessPointException {
+		
+		String b64Code = qrCodeGeneratorService.generateQRCodePngBase64(remissionId, 220, 211);
 
 		if (!"0".equalsIgnoreCase(folio)) { // Use equalsIgnoreCase with constants first to avoid potential NPE
 
@@ -94,6 +99,7 @@ public class JReportSheetService {
 			parameters.put("iva", iva);
 			parameters.put("total", (remissionVo.getTotal() + iva));
 			parameters.put("printPrices", printPrices);
+			parameters.put("qrCodeB64", b64Code);
 			
 
 			String totalString = String.format("%.2f", remissionVo.getTotal());

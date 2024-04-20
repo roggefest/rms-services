@@ -36,4 +36,5 @@ public class RemissionVO extends RepresentationModel<RemissionVO>{
 	private String userId;
 	private Date creationDate;
 	private Date upatedDate;
+	private Date deliveredDate;
 }

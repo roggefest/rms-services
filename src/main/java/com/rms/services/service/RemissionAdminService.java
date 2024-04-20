@@ -3,6 +3,8 @@ package com.rms.services.service;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -82,7 +84,7 @@ public class RemissionAdminService {
 
 	}
 
-	public @Valid RemissionVO createRemission(@Valid RemissionVO remisionRequest) {
+	public RemissionVO createRemission(@Valid RemissionVO remisionRequest) {
 
 		Remission remission;
 
@@ -209,7 +211,7 @@ public class RemissionAdminService {
 		return products;
 	}
 
-	public @Valid RemissionVO createRemissionDuplication(@Valid RemissionVO remisionRequest) {
+	public RemissionVO createRemissionDuplication(@Valid RemissionVO remisionRequest) {
 
 		// If the ID is not null or blank, attempt to find the existing Complex.
 		Remission remission = remissionRepository.findById(remisionRequest.getId())
@@ -302,5 +304,60 @@ public class RemissionAdminService {
 
 	    return productList;
 	}
+	
+    public RemissionVO checkRemissionDuplication(final String remissionId) {
+        // Ensure the ID is not null or blank before proceeding.
+        if (remissionId == null || remissionId.isBlank()) {
+            throw new IllegalArgumentException("Remission ID cannot be null or blank");
+        }
 
+        RemissionVO remissionVO = new RemissionVO();
+        // Attempt to find the existing Remission.
+        Remission remission = remissionRepository.findById(remissionId)
+                .orElseThrow(() -> new AccessPointException("Origin Remission with given ID does not exist"));
+
+        // Check if the status of the Remission is "Activa".
+        if ("Activa".equalsIgnoreCase(remission.getStatus())) {
+            // Update the status and delivered date of the Remission.
+            remission.setStatus("Entregada");
+            remission.setDeliveredDate(new Date());
+            // Save the updated Remission entity to the database.
+            remission = remissionRepository.save(remission);
+            // Copy properties from the Remission entity to the RemissionVO.
+            BeanUtils.copyProperties(remission, remissionVO);
+        } else {
+            throw new AccessPointException("Origin Remission with given ID is not active");
+        }
+
+        return remissionVO;
+    }
+    
+	public RemissionVO remissionCancelation(@Valid RemissionVO remisionRequest) throws ParseException {
+
+		// If the ID is not null or blank, attempt to find the existing Complex.
+		Remission remission = remissionRepository.findById(remisionRequest.getId())
+				.orElseThrow(() -> new AccessPointException("Origin Remission with given ID does not exist"));
+
+		if("Activa".equalsIgnoreCase(remission.getStatus())) {
+			// Update the existing remision entity with new values.
+			remission.setStatus("Cancelada");
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+			
+			if(remisionRequest.getObservations().isEmpty()) {	
+				remission.setObservations(String.format("Remisión cancelada el día %s",sdf.format(new Date())));	
+			}else {
+				remission.setObservations(remisionRequest.getObservations());	
+			}
+			// Save the updated Complex entity to the database.
+			remission = remissionRepository.save(remission);
+		}else {
+			throw new AccessPointException("No se puede cancelar la remisión");
+		}
+		
+		// Copy properties from the Complex entity back to the ComplexVO.
+		BeanUtils.copyProperties(remission, remisionRequest);
+		return remisionRequest;
+	}
 }
+

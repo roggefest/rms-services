@@ -36,4 +36,5 @@ public class Remission {
 	private String userId;
 	private Date creationDate;
 	private Date upatedDate;
+	private Date deliveredDate;
 }

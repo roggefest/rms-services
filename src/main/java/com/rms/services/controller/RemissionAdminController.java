@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rms.services.exception.AccessPointException;
 import com.rms.services.service.JReportSheetService;
 import com.rms.services.service.RemissionAdminService;
 import com.rms.services.vo.FiltersVO;
@@ -111,15 +112,15 @@ public class RemissionAdminController {
 		}
 
 	}
-	
+
 	@PostMapping("/remission/all/detail")
 	public ResponseEntity<List<ProductDetailedVO>> getAllRemissionsDetail(@RequestBody FiltersVO filters) {
 
 		List<ProductDetailedVO> results = remissionAdminService.getFilteredRemissionDetailed(filters);
-		
+
 		if (results.isEmpty()) {
 			return ResponseEntity.noContent().build();
-		} else {	
+		} else {
 			return new ResponseEntity<>(results, HttpStatus.OK);
 		}
 
@@ -142,6 +143,35 @@ public class RemissionAdminController {
 		jReportSheetService.exportJasperReport(response, remissionId, finalFolio, printPrices);
 	}
 
-	
+	@GetMapping("/remission/admin/check/{remissionId}")
+	public ResponseEntity<RemissionVO> getAllRemissionsDetail(@PathVariable String remissionId) {
+
+		try {
+			RemissionVO changedRemission = remissionAdminService.checkRemissionDuplication(remissionId);
+			return new ResponseEntity<>(changedRemission, HttpStatus.OK);
+		} catch (AccessPointException e) {
+			return ResponseEntity.noContent().build();
+		}
+
+	}
+
+	@PostMapping("/remission/cancelation")
+	public ResponseEntity<?> remissionCancelation(@RequestBody RemissionVO remissionRequest) {
+		System.out.println("Canceling remission");
+
+		try {
+			RemissionVO remisionResult = remissionAdminService.remissionCancelation(remissionRequest);
+			
+			if (remisionResult == null) {
+				return ResponseEntity.internalServerError().build();
+			}
+			
+			return ResponseEntity.ok().body(remisionResult);
+		} catch (Exception e) {
+			return ResponseEntity.ok().body(e.getMessage());
+		}
+
+		
+	}
 
 }
