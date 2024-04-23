@@ -40,11 +40,18 @@ public class RemissionAdminController {
 	@PostMapping("/remission")
 	public ResponseEntity<?> createRemission(@RequestBody @Valid RemissionVO complexRequest) {
 		System.out.println("Creating remission");
+		
+		try {
+			complexRequest = remissionAdminService.createRemission(complexRequest);
+			
+			if (complexRequest == null)
+				return ResponseEntity.internalServerError().build();
+		} catch (Exception e) {
+			// TODO: handle exception
+			return ResponseEntity.internalServerError().body(e.getMessage());
+		}
 
-		complexRequest = remissionAdminService.createRemission(complexRequest);
-
-		if (complexRequest == null)
-			return ResponseEntity.internalServerError().build();
+		
 
 		return ResponseEntity.ok().body(complexRequest);
 	}
