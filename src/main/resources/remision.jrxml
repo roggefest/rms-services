@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="remision" language="groovy" pageWidth="813" pageHeight="1059" columnWidth="737" leftMargin="38" rightMargin="38" topMargin="38" bottomMargin="38" uuid="242f0489-3976-4c55-9931-f057881aa793">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="18"/>
+	<property name="ireport.y" value="849"/>
 	<parameter name="folio" class="java.lang.String"/>
 	<parameter name="total" class="java.lang.Double"/>
 	<parameter name="expeditionDate" class="java.util.Date"/>
@@ -64,7 +64,7 @@
 				<textFieldExpression><![CDATA[$P{totalLetter}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="324" y="884" width="93" height="85" uuid="08f5a435-6ef3-4a1f-accd-7d2599dd9ce6"/>
+				<reportElement x="324" y="883" width="100" height="100" uuid="08f5a435-6ef3-4a1f-accd-7d2599dd9ce6"/>
 				<imageExpression><![CDATA[new java.io.StringBufferInputStream(new org.w3c.tools.codec.Base64Decoder($P{qrCodeB64}).processString())]]></imageExpression>
 			</image>
 		</band>

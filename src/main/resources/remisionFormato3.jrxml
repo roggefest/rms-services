@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="remision" language="groovy" pageWidth="612" pageHeight="396" orientation="Landscape" columnWidth="556" leftMargin="28" rightMargin="28" topMargin="28" bottomMargin="28" uuid="242f0489-3976-4c55-9931-f057881aa793">
-	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="252"/>
+	<property name="ireport.y" value="46"/>
 	<parameter name="folio" class="java.lang.String"/>
 	<parameter name="total" class="java.lang.Double"/>
 	<parameter name="expeditionDate" class="java.util.Date"/>
@@ -64,7 +64,7 @@
 				<textFieldExpression><![CDATA[$P{iva}.doubleValue()]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="193" y="285" width="60" height="52" uuid="29080b82-d0b9-4396-ac28-60f7fcde779e"/>
+				<reportElement x="193" y="288" width="60" height="52" uuid="29080b82-d0b9-4396-ac28-60f7fcde779e"/>
 				<imageExpression><![CDATA[new java.io.StringBufferInputStream(new org.w3c.tools.codec.Base64Decoder($P{qrCodeB64}).processString())]]></imageExpression>
 			</image>
 		</band>
