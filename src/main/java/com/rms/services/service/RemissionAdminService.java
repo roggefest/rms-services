@@ -85,7 +85,10 @@ public class RemissionAdminService {
 	}
 
 	public RemissionVO createRemission(@Valid RemissionVO remisionRequest) {
-
+		
+		long noRemision = remissionRepository.findByFolio(remisionRequest.getFolio()).stream()
+		.filter(rm -> !rm.getId().equalsIgnoreCase(remisionRequest.getId())).count();
+		
 		Remission remission;
 
 		final List<Product> productList = new ArrayList<>();
@@ -104,6 +107,11 @@ public class RemissionAdminService {
 		// needs to be created.
 		if (remisionRequest.getId() == null || remisionRequest.getId().isBlank()
 				|| remisionRequest.getId().equalsIgnoreCase("0")) {
+			
+			if(noRemision != 0) {
+				throw new AccessPointException("El Folio proporcionado ya existe en otra remisión");
+			}
+				
 			remission = Remission.builder().folio(remisionRequest.getFolio())
 					.destinationId(remisionRequest.getDestinationId())
 					.areaDescription(remisionRequest.getAreaDescription())
@@ -122,9 +130,13 @@ public class RemissionAdminService {
 			// Save the new Complex entity to the database.
 			remission = remissionRepository.save(remission);
 		} else {
+			
+			if(noRemision != 0) {
+				throw new AccessPointException("El Folio proporcionado ya existe en otra remisión");
+			}
 			// If the ID is not null or blank, attempt to find the existing Complex.
 			Remission existingRemission = remissionRepository.findById(remisionRequest.getId())
-					.orElseThrow(() -> new AccessPointException("Remission with given ID does not exist"));
+					.orElseThrow(() -> new AccessPointException("No existe la remisión con el ID proporcionado"));
 
 			// Update the existing Complex entity with new values.
 			existingRemission.setTotal(remisionRequest.getTotal());
