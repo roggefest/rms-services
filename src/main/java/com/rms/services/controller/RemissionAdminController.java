@@ -47,11 +47,8 @@ public class RemissionAdminController {
 			if (complexRequest == null)
 				return ResponseEntity.internalServerError().build();
 		} catch (Exception e) {
-			// TODO: handle exception
 			return ResponseEntity.internalServerError().body(e.getMessage());
 		}
-
-		
 
 		return ResponseEntity.ok().body(complexRequest);
 	}
